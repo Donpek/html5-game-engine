@@ -11,7 +11,6 @@
   <script src='canvas.js'></script>
   <script src='math-stuffs.js'></script>
   <script src='sprite.js'></script>
-  <script src='world.js'></script>
 </head>
 
 <body style='background:#333'>
@@ -23,52 +22,63 @@
 
   var FPS = 1000/30;
 
-  var sheetPaths = ['sprites/testTile2.png', 'sprites/testTile.png', 'sprites/testSheet.png',
+  var gfx_src = ['sprites/testTile.png', 'sprites/testTile2.png', 'sprites/testSheet.png',
     'sprites/pokemon.png'];
   var sprites = [];
 
+  /*map.js*/
   var map = [1,1,1,1,1,1,1,1,1,1,
              1,1,1,1,1,1,1,1,1,1,
              1,1,0,0,0,0,0,0,1,1,
              1,1,0,0,0,0,0,0,1,1,
-             1,1,0,0,0,0,0,0,1,1,
-             1,1,0,0,0,0,0,0,1,1,
+             1,1,0,0,1,1,0,0,1,1,
+             1,1,0,0,1,1,0,0,1,1,
              1,1,0,0,0,0,0,0,1,1,
              1,1,0,0,0,0,0,0,1,1,
              1,1,1,1,1,1,1,1,1,1,
              1,1,1,1,1,1,1,1,1,1];
 
   var map_index;
+  /**/
 
+  /*player.js*/
   var px = py = 32;
   var moveSpeed = 2;
   var testAni = new Animation([96,97,98,97,96],[0,3,4,3,2]);
+  /**/
 
-  $(document).ready(function(){
+  $(document).ready(function()
+  {
+    /*Initialize*/
     C = new HTML_Canvas('game', 800, 640, '2d');
     startTrackingKeyboardInput();
+      /*Disable scrolling*/
     document.documentElement.style.overflow = 'hidden';
     document.body.scroll = 'no';
+      /**/
+    /**/
 
-    spritesheets_loaded_callback = function()
+    on_sprites_loaded = function()
     {
+      setInterval(function()
+      {
+        /*Map.*/
+        map_index = 0;
+        for(var y=0;y<10;y++)
+          for(var x=0;x<10;x++,map_index++)
+            sprites[map[map_index]].draw(x*TILE_W, y*TILE_H);
 
+        if(Keyboard.up) py -= moveSpeed;
+        if(Keyboard.right) px += moveSpeed;
+        if(Keyboard.down) py += moveSpeed;
+        if(Keyboard.left) px -= moveSpeed;
 
-      sprites.push(new Sprite(spritesheets[2]));
-
-      setInterval(function(){
-        drawMap();
-
-      if(Keyboard.up) py -= moveSpeed;
-      if(Keyboard.right) px += moveSpeed;
-      if(Keyboard.down) py += moveSpeed;
-      if(Keyboard.left) px -= moveSpeed;
-
-      sprites[3].drawAnimated(px,py,testAni);
+        sprites[3].drawAnimated(px,py,testAni);
+        sprites[3].drawFromSheet(0,0,144);
       },FPS);
     };
 
-    loadSpritesheets(sheetPaths);
+    loadSprites(gfx_src);
   });
   </script>
 

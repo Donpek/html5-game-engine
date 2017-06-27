@@ -1,6 +1,5 @@
 /*DEPENDENCIES
 *   math-stuffs.js
-*   canvas.js
 */
 
 /*PURPOSE
@@ -11,27 +10,16 @@
 var Sprite = function(file_path)
 {
   this.image = null;
-  this.spritesheet = null;
 
   this.curentFrame = null;
   this.frameDelayCounter = null;
   this.currentFrameIndex = 0;
 
-  this.load = function()
-  {
-    this.image = new Image();
-    this.image.src = file_path;
-  };
-
-  if(file_path instanceof Spritesheet)
-  {
-    this.spritesheet = file_path;
-    this.image = this.spritesheet.image;
-  }else
   //Valid file path?
   if(file_path != null && file_path != undefined && file_path != "")
   {
-    this.load();
+    this.image = new Image();
+    this.image.src = file_path;
   }else{
     console.log('Failed to load ' + file_path);
   }
@@ -39,6 +27,13 @@ var Sprite = function(file_path)
   this.draw = function(x, y)
   {
     C.ctx.drawImage(this.image, x, y, TILE_W, TILE_H);
+  };
+
+  this.drawFromSheet = function(x, y, sprite_id)
+  {
+    var coords = i2xy(sprite_id, this.image.widthInTiles);
+    C.ctx.drawImage(this.image, coords[0]*TILE_W, coords[1]*TILE_H,
+      TILE_W, TILE_H, x, y, TILE_W, TILE_H);
   };
 
   this.drawStretched = function(x, y, w, h)
@@ -71,8 +66,7 @@ var Sprite = function(file_path)
       this.currentFrame = animation.sequence[this.currentFrameIndex].spriteID;
     }
     var sprite_coordinates = i2xy(this.currentFrame,
-      this.spritesheet.widthInTiles);
-      console.log(this.spritesheet.widthInTiles);
+      this.widthInTiles);
     C.ctx.drawImage(this.image, sprite_coordinates[0]*32,
       sprite_coordinates[1]*32, 32, 32, x, y, 32, 32);
   };
@@ -82,29 +76,27 @@ var Sprite = function(file_path)
 //------------LOADING---------
 //----------------------------
 
-var spritesheets = [];
-var spritesheets_loaded_callback = null;
+var sprites = [];
+var on_sprites_loaded = null;
 
-function loadSpritesheets(file_path_array)
+function loadSprites(file_paths)
 {
-  var spritesheet = new Spritesheet(file_path_array[0]);
-  file_path_array.shift();
-  spritesheets.push(spritesheet);
+  var sprite = new Sprite(file_paths[0]);
+  file_paths.shift();
+  sprites.push(sprite);
 
-  spritesheet.image.onload = function()
+  sprite.image.onload = function()
   {
-    spritesheet.widthInTiles = spritesheet.image.width/TILE_W;
+    /*values that can only be initialized when the image has been loaded*/
+    sprite.widthInTiles = sprite.image.width / TILE_W;
+    /**/
 
-    if(file_path_array.length > 0)
+    if(file_paths.length > 0)
     {
-      loadSpritesheets(file_path_array);
+      loadSprites(file_paths);
     }else{
-      console.log('Done loading spritesheets.');
-
-      for(var i=0;i<spritesheets.length;i++)
-        sprites.push(new Sprite(spritesheets[i]));
-
-      spritesheets_loaded_callback();
+      console.log('Done loading sprites.');
+      on_sprites_loaded();
     }
   };
 }
