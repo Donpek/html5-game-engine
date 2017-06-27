@@ -18,7 +18,9 @@
   var TILE_W = 32;
   var TILE_H = 32;
 
-  var tilePaths = ['sprites/testTile.png', 'sprites/testTile2.png'];
+  var FPS = 1000/30;
+
+  var tilePaths = ['sprites/testTile.png', 'sprites/testTile2.png', 'sprites/testSheet.png'];
 
   var map = [1,1,0,0,0,0,0,0,0,0,
              1,1,0,0,0,0,0,0,0,0,
@@ -45,6 +47,10 @@
       for(var y=0;y<10;y++)
         for(var x=0;x<10;x++,map_index++)
           sprites[map[map_index]].draw(50 + x*TILE_W, 50 + y*TILE_H);
+
+      setInterval(function(){
+        sprites[2].drawAnimated(64,0,[0,1,2,3,4,5]);
+      },FPS);
     };
 
     loadSprites(tilePaths);

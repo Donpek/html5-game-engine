@@ -12,6 +12,10 @@ var Sprite = function(file_path)
 {
   this.image = null;
 
+  this.curentFrame = null;
+  this.frameDelayCounter = 0;
+  this.currentFrameIndex = 0;
+
   this.load = function()
   {
     this.image = new Image();
@@ -44,4 +48,21 @@ var Sprite = function(file_path)
     C.ctx.drawImage(this.image, -(this.image.width/2), -(this.image.height/2));
     C.ctx.restore();
   };
+
+  this.drawAnimated = function(x, y, frame_sequence)
+  {
+    if(this.frameDelayCounter++ == 6)
+    {
+      this.frameDelayCounter = 0;
+      this.currentFrameIndex++;
+      if(this.currentFrameIndex == frame_sequence.length)
+      {
+        this.currentFrameIndex = 0;
+      }
+      this.currentFrame = frame_sequence[this.currentFrameIndex]
+    }
+    var sprite_coordinates = i2xy(this.currentFrame, 6);
+    C.ctx.drawImage(this.image, sprite_coordinates[0]*32,
+      sprite_coordinates[1]*32, 32, 32, x, y, 32, 32);
+  }
 }
