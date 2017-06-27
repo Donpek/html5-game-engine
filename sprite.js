@@ -11,6 +11,7 @@
 var Sprite = function(file_path)
 {
   this.image = null;
+  this.spritesheet = null;
 
   this.curentFrame = null;
   this.frameDelay = 4;
@@ -23,6 +24,11 @@ var Sprite = function(file_path)
     this.image.src = file_path;
   };
 
+  if(file_path instanceof Spritesheet)
+  {
+    this.spritesheet = file_path;
+    this.image = this.spritesheet.image;
+  }else
   //Valid file path?
   if(file_path != null && file_path != undefined && file_path != "")
   {

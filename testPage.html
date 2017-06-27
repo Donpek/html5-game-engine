@@ -5,6 +5,7 @@
   <meta name='viewport' content='width=device-width, initial-scale=1' />
 
   <script src='jquery-3.2.1.min.js'></script>
+  <script src='spritesheet.js'></script>
   <script src='keyboard.js'></script>
   <script src='canvas.js'></script>
   <script src='math-stuffs.js'></script>
@@ -22,7 +23,8 @@
 
   var FPS = 1000/30;
 
-  var tilePaths = ['sprites/testTile.png', 'sprites/testTile2.png', 'sprites/testSheet.png'];
+  var sheetPaths = ['sprites/testTile.png', 'sprites/testTile2.png', 'sprites/testSheet.png'];
+  var sprites = [];
 
   var map = [1,1,0,0,0,0,0,0,0,0,
              1,1,0,0,0,0,0,0,0,0,
@@ -44,21 +46,28 @@
     C = new HTML_Canvas('game', 800, 640, '2d');
     startTrackingKeyboardInput();
 
-    sprites_loaded_callback = function()
+    spritesheets_loaded_callback = function()
     {
+      for(var i=0;i<spritesheets.length;i++)
+        sprites.push(new Sprite(spritesheets[i]));
+
+      sprites.push(new Sprite(spritesheets[2]));
+
       setInterval(function(){
         drawMap();
 
-        if(Keyboard.up) py -= moveSpeed;
-        if(Keyboard.right) px += moveSpeed;
-        if(Keyboard.down) py += moveSpeed;
-        if(Keyboard.left) px -= moveSpeed;
+      if(Keyboard.up) py -= moveSpeed;
+      if(Keyboard.right) px += moveSpeed;
+      if(Keyboard.down) py += moveSpeed;
+      if(Keyboard.left) px -= moveSpeed;
 
-        sprites[2].drawAnimated(px,py,[0,1,2,3,4,5]);
+      sprites[2].drawAnimated(px,py,[0,1,2,3,4,5]);
+      sprites[3].drawAnimated(px+32,py+32,[5,5,5,2,2,2]);
+
       },FPS);
     };
 
-    loadSprites(tilePaths);
+    loadSpritesheets(sheetPaths);
   });
   </script>
 
