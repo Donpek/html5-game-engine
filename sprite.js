@@ -13,7 +13,8 @@ var Sprite = function(file_path)
   this.image = null;
 
   this.curentFrame = null;
-  this.frameDelayCounter = 0;
+  this.frameDelay = 4;
+  this.frameDelayCounter = this.frameDelay;
   this.currentFrameIndex = 0;
 
   this.load = function()
@@ -51,7 +52,7 @@ var Sprite = function(file_path)
 
   this.drawAnimated = function(x, y, frame_sequence)
   {
-    if(this.frameDelayCounter++ == 6)
+    if(this.frameDelayCounter++ == this.frameDelay)
     {
       this.frameDelayCounter = 0;
       this.currentFrameIndex++;

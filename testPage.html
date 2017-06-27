@@ -5,10 +5,12 @@
   <meta name='viewport' content='width=device-width, initial-scale=1' />
 
   <script src='jquery-3.2.1.min.js'></script>
+  <script src='keyboard.js'></script>
   <script src='canvas.js'></script>
   <script src='math-stuffs.js'></script>
   <script src='sprite.js'></script>
   <script src='loader.js'></script>
+  <script src='world.js'></script>
 </head>
 
 <body style='background:#333'>
@@ -35,21 +37,24 @@
 
   var map_index;
 
+  var px = py = 32;
+  var moveSpeed = 5;
+
   $(document).ready(function(){
     C = new HTML_Canvas('game', 800, 640, '2d');
+    startTrackingKeyboardInput();
 
     sprites_loaded_callback = function()
     {
-      sprites[0].draw(0,0);
-      sprites[1].draw(32,0);
-
-      map_index = 0;
-      for(var y=0;y<10;y++)
-        for(var x=0;x<10;x++,map_index++)
-          sprites[map[map_index]].draw(50 + x*TILE_W, 50 + y*TILE_H);
-
       setInterval(function(){
-        sprites[2].drawAnimated(64,0,[0,1,2,3,4,5]);
+        drawMap();
+
+        if(Keyboard.up) py -= moveSpeed;
+        if(Keyboard.right) px += moveSpeed;
+        if(Keyboard.down) py += moveSpeed;
+        if(Keyboard.left) px -= moveSpeed;
+
+        sprites[2].drawAnimated(px,py,[0,1,2,3,4,5]);
       },FPS);
     };
 
