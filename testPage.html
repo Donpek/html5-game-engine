@@ -1,18 +1,38 @@
 <!DOCTYPE HTML>
 <html>
-<header>
-  <title>HTML Game Engine test</title>
+<head>
+  <title>HTML Game Engine</title>
   <meta name='viewport' content='width=device-width, initial-scale=1' />
 
   <script src='jquery-3.2.1.min.js'></script>
+  <script src='canvas.js'></script>
   <script src='math-stuffs.js'></script>
   <script src='sprite.js'></script>
-  <script src='testGame.js'></script>
-</header>
+  <script src='loader.js'></script>
+</head>
 
 <body style='background:#333'>
-  <canvas id="canvas" width='640px' height='480px'
-    style='width:640px; height:480px; border:1px solid gray'
-  ></canvas>
+  <script language='javascript'>
+  var C = null;
+
+  var TILE_W = 32;
+  var TILE_H = 32;
+
+  var tilePaths = ['sprites/testTile.png', 'sprites/testTile2.png'];
+
+  $(document).ready(function(){
+    C = new HTML_Canvas('game', 800, 640, '2d');
+
+    sprites_loaded_callback = function()
+    {
+      sprites[0].draw(0,0);
+      sprites[1].draw(32,0);
+    };
+
+    loadSprites(tilePaths);
+  });
+  </script>
+
+  <canvas id="game"></canvas>
 </body>
 </html>
