@@ -14,8 +14,7 @@ var Sprite = function(file_path)
   this.spritesheet = null;
 
   this.curentFrame = null;
-  this.frameDelay = 4;
-  this.frameDelayCounter = this.frameDelay;
+  this.frameDelayCounter = null;
   this.currentFrameIndex = 0;
 
   this.load = function()
@@ -56,20 +55,56 @@ var Sprite = function(file_path)
     C.ctx.restore();
   };
 
-  this.drawAnimated = function(x, y, frame_sequence)
+  this.drawAnimated = function(x, y, animation)
   {
-    if(this.frameDelayCounter++ == this.frameDelay)
+    if(this.frameDelayCounter === null)
+      this.frameDelayCounter = animation.sequence[this.currentFrameIndex].delay;
+
+    if(this.frameDelayCounter++ == animation.sequence[this.currentFrameIndex].delay)
     {
       this.frameDelayCounter = 0;
       this.currentFrameIndex++;
-      if(this.currentFrameIndex == frame_sequence.length)
+      if(this.currentFrameIndex == animation.sequence.length)
       {
         this.currentFrameIndex = 0;
       }
-      this.currentFrame = frame_sequence[this.currentFrameIndex]
+      this.currentFrame = animation.sequence[this.currentFrameIndex].spriteID;
     }
-    var sprite_coordinates = i2xy(this.currentFrame, 6);
+    var sprite_coordinates = i2xy(this.currentFrame,
+      this.spritesheet.widthInTiles);
+      console.log(this.spritesheet.widthInTiles);
     C.ctx.drawImage(this.image, sprite_coordinates[0]*32,
       sprite_coordinates[1]*32, 32, 32, x, y, 32, 32);
-  }
+  };
+}
+
+//----------------------------
+//------------LOADING---------
+//----------------------------
+
+var spritesheets = [];
+var spritesheets_loaded_callback = null;
+
+function loadSpritesheets(file_path_array)
+{
+  var spritesheet = new Spritesheet(file_path_array[0]);
+  file_path_array.shift();
+  spritesheets.push(spritesheet);
+
+  spritesheet.image.onload = function()
+  {
+    spritesheet.widthInTiles = spritesheet.image.width/TILE_W;
+
+    if(file_path_array.length > 0)
+    {
+      loadSpritesheets(file_path_array);
+    }else{
+      console.log('Done loading spritesheets.');
+
+      for(var i=0;i<spritesheets.length;i++)
+        sprites.push(new Sprite(spritesheets[i]));
+
+      spritesheets_loaded_callback();
+    }
+  };
 }
