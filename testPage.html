@@ -5,7 +5,6 @@
   <meta name='viewport' content='width=device-width, initial-scale=1' />
 
   <script src='jquery-3.2.1.min.js'></script>
-  <script src='spritesheet.js'></script>
   <script src='animation.js'></script>
   <script src='keyboard.js'></script>
   <script src='canvas.js'></script>
@@ -15,36 +14,50 @@
 
 <body style='background:#333'>
   <script language='javascript'>
-  var C = null;
+  const TILE_W = 32;
+  const TILE_H = 32;
 
-  var TILE_W = 32;
-  var TILE_H = 32;
+  let C = null;
+  const FPS = 1000/30;
 
-  var FPS = 1000/30;
-
-  var gfx_src = ['sprites/testTile.png', 'sprites/testTile2.png', 'sprites/testSheet.png',
+  const gfx_src = ['sprites/testTile.png', 'sprites/testTile2.png', 'sprites/testSheet.png',
     'sprites/pokemon.png'];
-  var sprites = [];
 
   /*map.js*/
-  var map = [1,1,1,1,1,1,1,1,1,1,
-             1,1,1,1,1,1,1,1,1,1,
-             1,1,0,0,0,0,0,0,1,1,
-             1,1,0,0,0,0,0,0,1,1,
-             1,1,0,0,1,1,0,0,1,1,
-             1,1,0,0,1,1,0,0,1,1,
-             1,1,0,0,0,0,0,0,1,1,
-             1,1,0,0,0,0,0,0,1,1,
-             1,1,1,1,1,1,1,1,1,1,
-             1,1,1,1,1,1,1,1,1,1];
+  const map = [0,0,1,1,1,0,2,2,2,2,
+               0,1,1,1,0,0,0,2,2,2,
+               1,1,1,0,0,0,0,2,2,2,
+               1,1,0,0,0,0,0,0,2,2,
+               1,1,0,0,0,0,0,0,2,2,
+               1,1,0,0,0,0,0,0,2,2,
+               1,1,0,0,0,0,0,0,2,2,
+               1,1,0,0,0,0,0,2,2,2,
+               1,1,1,0,0,0,0,2,2,2,
+               0,1,1,1,0,0,2,2,2,2];
 
-  var map_index;
+  let map_index = 0;
   /**/
 
   /*player.js*/
-  var px = py = 32;
-  var moveSpeed = 2;
-  var testAni = new Animation([96,97,98,97,96],[0,3,4,3,2]);
+  let px = py = 32;
+  const moveSpeed = 2;
+  let direction = 0;
+
+    /*temp*/
+  const green_poke_delay = [4,4,4,4];
+  const green_poke_SW = new Animation([117,118,119,118],green_poke_delay);
+  const green_poke_W = new Animation([114,115,116,115],green_poke_delay);
+  const green_poke_NW = new Animation([111,112,113,112],green_poke_delay);
+  const green_poke_N = new Animation([108,109,110,109],green_poke_delay);
+  const green_poke_NE = new Animation([105,106,107,106],green_poke_delay);
+  const green_poke_E = new Animation([102,103,104,103],green_poke_delay);
+  const green_poke_SE = new Animation([99,100,101,100],green_poke_delay);
+  const green_poke_S = new Animation([96,97,98,97],green_poke_delay);
+    /**/
+
+  let pokemonAni = green_poke_S;
+  let pokemonStill = 96;
+  const waterAni = new Animation([0,1,2,3,4,5],[75,77,99,77,75,73]);
   /**/
 
   $(document).ready(function()
@@ -60,21 +73,59 @@
 
     on_sprites_loaded = function()
     {
+      const pokemon_npc = new Drawable(sprites[3]);
+      const pokemon_player = new Drawable(sprites[3]);
+      const tile_orange = new Drawable(sprites[0]);
+      const tile_red = new Drawable(sprites[1]);
+      const water = new Drawable(sprites[2]);
+
+      const static_tiles = [tile_orange, tile_red];
+      const animated_tiles = [water];
+
       setInterval(function()
       {
         /*Map.*/
         map_index = 0;
-        for(var y=0;y<10;y++)
-          for(var x=0;x<10;x++,map_index++)
-            sprites[map[map_index]].draw(x*TILE_W, y*TILE_H);
+        for(let y=0;y<10;y++)
+          for(let x=0;x<10;x++,map_index++)
+          {
+            if(map[map_index] < static_tiles.length)
+            {
+              static_tiles[map[map_index]].draw(x*TILE_W, y*TILE_H);
+            }else{
+              animated_tiles[map[map_index] - static_tiles.length].
+                drawAnimated(x*TILE_W, y*TILE_H, waterAni);
+            }
+          }
+        /**/
 
-        if(Keyboard.up) py -= moveSpeed;
-        if(Keyboard.right) px += moveSpeed;
-        if(Keyboard.down) py += moveSpeed;
-        if(Keyboard.left) px -= moveSpeed;
+        /*Player controls*/
+        direction = 0;
+        if(Keyboard.up) {py -= moveSpeed; direction |= DIR_N;}
+        if(Keyboard.right) {px += moveSpeed; direction |= DIR_E;}
+        if(Keyboard.down) {py += moveSpeed; direction |= DIR_S;}
+        if(Keyboard.left) {px -= moveSpeed; direction |= DIR_W;}
+        /**/
 
-        sprites[3].drawAnimated(px,py,testAni);
-        sprites[3].drawFromSheet(0,0,144);
+        /*Animation*/
+        if(direction & DIR_N) pokemonAni = green_poke_N;
+        if(direction & DIR_E) pokemonAni = green_poke_E;
+        if(direction & DIR_S) pokemonAni = green_poke_S;
+        if(direction & DIR_W) pokemonAni = green_poke_W;
+        if(direction & DIR_N && direction & DIR_E) pokemonAni = green_poke_NE;
+        if(direction & DIR_N && direction & DIR_W) pokemonAni = green_poke_NW;
+        if(direction & DIR_S && direction & DIR_E) pokemonAni = green_poke_SE;
+        if(direction & DIR_S && direction & DIR_W) pokemonAni = green_poke_SW;
+
+        pokemonStill = pokemonAni.sequence[0].spriteID;
+
+        if(direction === 0){
+          pokemon_player.drawFromSheet(px,py,pokemonStill);
+        }else {
+          pokemon_player.drawAnimated(px,py,pokemonAni);
+        }
+        pokemon_npc.drawFromSheet(224,160,15);
+        /**/
       },FPS);
     };
 

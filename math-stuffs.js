@@ -1,4 +1,4 @@
-var TO_RADIANS = Math.PI / 180;
+const TO_RADIANS = Math.PI / 180;
 
 function RandomInt(min, max) // [min; max)
 {

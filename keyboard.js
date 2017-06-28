@@ -13,6 +13,8 @@ var Keyboard =
   shift: false
 };
 
+const DIR_N = 1, DIR_E = 2, DIR_S = 4, DIR_W = 8;
+
 function startTrackingKeyboardInput()
 {
   $(document).on('keydown', function(e){

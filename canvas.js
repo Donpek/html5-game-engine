@@ -1,4 +1,4 @@
-var HTML_Canvas = function(canvas_id, width, height, context_type)
+const HTML_Canvas = function(canvas_id, width, height, context_type)
 {
   this.width = width;
   this.height = height;

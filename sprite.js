@@ -7,14 +7,10 @@
 *     draw, drawStretched and drawRotated.
 */
 
-var Sprite = function(file_path)
+const Sprite = function(file_path)
 {
   this.image = null;
-
-  this.curentFrame = null;
-  this.frameDelayCounter = null;
-  this.currentFrameIndex = 0;
-
+  this.widthInTiles = null;
   //Valid file path?
   if(file_path != null && file_path != undefined && file_path != "")
   {
@@ -23,22 +19,31 @@ var Sprite = function(file_path)
   }else{
     console.log('Failed to load ' + file_path);
   }
+}
+
+const Drawable = function(sprite)
+{
+  this.sprite = sprite;
+
+  this.curentFrame = null;
+  this.frameDelayCounter = null;
+  this.currentFrameIndex = 0;
 
   this.draw = function(x, y)
   {
-    C.ctx.drawImage(this.image, x, y, TILE_W, TILE_H);
+    C.ctx.drawImage(this.sprite.image, x, y, TILE_W, TILE_H);
   };
 
   this.drawFromSheet = function(x, y, sprite_id)
   {
-    var coords = i2xy(sprite_id, this.image.widthInTiles);
-    C.ctx.drawImage(this.image, coords[0]*TILE_W, coords[1]*TILE_H,
+    const coords = i2xy(sprite_id, this.sprite.widthInTiles);
+    C.ctx.drawImage(this.sprite.image, coords[0]*TILE_W, coords[1]*TILE_H,
       TILE_W, TILE_H, x, y, TILE_W, TILE_H);
   };
 
   this.drawStretched = function(x, y, w, h)
   {
-    C.ctx.drawImage(this.image, x, y, w, h);
+    C.ctx.drawImage(this.sprite.image, x, y, w, h);
   }
 
   this.drawRotated = function(x, y, angle)
@@ -46,7 +51,7 @@ var Sprite = function(file_path)
     C.ctx.save();
     C.ctx.translate(1.5 * x, 1.5 * y);
     C.ctx.rotate(angle * TO_RADIANS);
-    C.ctx.drawImage(this.image, -(this.image.width/2), -(this.image.height/2));
+    C.ctx.drawImage(this.sprite.image, -TILE_W/2, -TILE_H/2);
     C.ctx.restore();
   };
 
@@ -65,9 +70,9 @@ var Sprite = function(file_path)
       }
       this.currentFrame = animation.sequence[this.currentFrameIndex].spriteID;
     }
-    var sprite_coordinates = i2xy(this.currentFrame,
-      this.widthInTiles);
-    C.ctx.drawImage(this.image, sprite_coordinates[0]*32,
+    const sprite_coordinates = i2xy(this.currentFrame,
+      this.sprite.widthInTiles);
+    C.ctx.drawImage(this.sprite.image, sprite_coordinates[0]*32,
       sprite_coordinates[1]*32, 32, 32, x, y, 32, 32);
   };
 }
@@ -76,12 +81,12 @@ var Sprite = function(file_path)
 //------------LOADING---------
 //----------------------------
 
-var sprites = [];
-var on_sprites_loaded = null;
+const sprites = [];
+let on_sprites_loaded = null;
 
 function loadSprites(file_paths)
 {
-  var sprite = new Sprite(file_paths[0]);
+  const sprite = new Sprite(file_paths[0]);
   file_paths.shift();
   sprites.push(sprite);
 
