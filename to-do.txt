@@ -1,0 +1,5 @@
+- real-time map editor
+  + mouse position tracking
+  + tile pallette
+  - save/load maps as json(tiles:[], entities:[])
+- collision detection

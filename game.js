@@ -8,6 +8,15 @@ on_sprites_loaded = () => {
   const static_tiles = [tile_orange, tile_red];
   const animated_tiles = [water];
 
+  tiles = [static_tiles, animated_tiles];
+
+  Drawable.prototype.ctx = Pallette.ctx;
+  for(let i=0,l=Math.max(static_tiles.length,animated_tiles.length);i<l;i++){
+    if(static_tiles.length > i) static_tiles[i].whole(i*TILE_W, 0);
+    if(animated_tiles.length > i) animated_tiles[i].sheet(i*TILE_W, TILE_H, 0);
+  }
+
+  Drawable.prototype.ctx = Game.ctx;
   setInterval( () => {
     /*Map.*/
     map_index = 0;
@@ -24,15 +33,13 @@ on_sprites_loaded = () => {
       }
     /**/
 
-    /*Player controls*/
+    /**
     direction = 0;
     if(Keys.up) {py -= moveSpeed; direction |= DIR_N;}
     if(Keys.right) {px += moveSpeed; direction |= DIR_E;}
     if(Keys.down) {py += moveSpeed; direction |= DIR_S;}
     if(Keys.left) {px -= moveSpeed; direction |= DIR_W;}
-    /**/
 
-    /*Animation*/
     if(direction & DIR_N) pokemonAni = green_poke_N;
     if(direction & DIR_E) pokemonAni = green_poke_E;
     if(direction & DIR_S) pokemonAni = green_poke_S;

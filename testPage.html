@@ -5,10 +5,11 @@
   <meta name='viewport' content='width=device-width, initial-scale=1' />
 
   <script src='jquery-3.2.1.min.js'></script>
+  <script src='mouse.js'></script>
   <script src='animation.js'></script>
   <script src='keyboard.js'></script>
   <script src='canvas.js'></script>
-  <script src='math-stuffs.js'></script>
+  <script src='misc.js'></script>
   <script src='sprite.js'></script>
   <script src='game.js'></script>
 </head>
@@ -18,26 +19,31 @@
   const TILE_W = 32;
   const TILE_H = 32;
 
-  let C = null;
+  let Game_Canvas = null;
+  let Pallette = null;
+
   const FPS = 1000/30;
 
   const gfx_src = [
     'sprites/testTile.png',
     'sprites/testTile2.png',
     'sprites/testSheet.png',
-    'sprites/pokemon.png'
+    'sprites/pokemon.png',
   ];
 
-  const map = [0,0,1,1,1,0,2,2,2,2,
-               0,1,1,1,0,0,0,2,2,2,
-               1,1,1,0,0,0,0,2,2,2,
-               1,1,0,0,0,0,0,0,2,2,
-               1,1,0,0,0,0,0,0,2,2,
-               1,1,0,0,0,0,0,0,2,2,
-               1,1,0,0,0,0,0,0,2,2,
-               1,1,0,0,0,0,0,2,2,2,
-               1,1,1,0,0,0,0,2,2,2,
-               0,1,1,1,0,0,2,2,2,2];
+  let tiles;
+  let map = [
+    0,0,1,1,1,0,2,2,2,2,
+    0,1,1,1,0,0,0,2,2,2,
+    1,1,1,0,0,0,0,2,2,2,
+    1,1,0,0,0,0,0,0,2,2,
+    1,1,0,0,0,0,0,0,2,2,
+    1,1,0,0,0,0,0,0,2,2,
+    1,1,0,0,0,0,0,0,2,2,
+    1,1,0,0,0,0,0,2,2,2,
+    1,1,1,0,0,0,0,2,2,2,
+    0,1,1,1,0,0,2,2,2,2,
+  ];
 
   let map_index = 0;
 
@@ -66,15 +72,22 @@
     document.documentElement.style.overflow = 'hidden';
     document.body.scroll = 'no';
     /**/
-    C = new HTML_Canvas('game', 800, 640, '2d');
-    Drawable.prototype.ctx = C.ctx;
+    Game = new HTML_Canvas('game', TILE_W*10, TILE_H*10, '2d');
+    Pallette = new HTML_Canvas('pallette', TILE_W*12, TILE_H*2, '2d');
 
     Sprites(gfx_src);
     Keyboard();
+    Mouse();
   });
   </script>
 
-  <canvas id="game"></canvas>
+  <canvas id="game" style="background:black"></canvas>
+  <canvas id='pallette' style="background:gray"></canvas>
+  <form action="">
+    Map editor
+    <input id='editor_on' type="radio" name="gender"> ON
+    <input type="radio" name="gender" checked='checked'> OFF
+  </form>
 </body>
 </html>
 

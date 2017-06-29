@@ -11,6 +11,7 @@ const Sprite = function sprite_constructor(file_path)
 {
   this.image = null;
   this.widthInTiles = null;
+  this.name = file_path.replace('sprites/', '').replace('.png', '');
   //Valid file path?
   if(file_path != null && file_path != undefined && file_path != "")
   {
