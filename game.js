@@ -1,44 +1,53 @@
 on_sprites_loaded = () => {
   const pokemon_npc = new Drawable(sprites[3]);
   const pokemon_player = new Drawable(sprites[3]);
-  const tile_orange = new Drawable(sprites[0]);
-  const tile_red = new Drawable(sprites[1]);
-  const water = new Drawable(sprites[2]);
 
-  const static_tiles = [tile_orange, tile_red];
-  const animated_tiles = [water];
+  tiles = {
+    static: [
+      new Tile(sprites[0], false), //orange
+      new Tile(sprites[1], false), //red
+    ],
+    animated: [
+      new Tile(sprites[2], true, waterAni), //water
+    ],
+  };
 
-  tiles = [static_tiles, animated_tiles];
+  current_map = new Map(Game.widthInTiles, Game.heightInTiles);
+  current_map.addLayer(tiles.static[0]);
 
   Drawable.prototype.ctx = Pallette.ctx;
-  for(let i=0,l=Math.max(static_tiles.length,animated_tiles.length);i<l;i++){
-    if(static_tiles.length > i) static_tiles[i].whole(i*TILE_W, 0);
-    if(animated_tiles.length > i) animated_tiles[i].sheet(i*TILE_W, TILE_H, 0);
-  }
+  for(let i=0;i<tiles.static.length;i++) tiles.static[i].tile.whole(i*TILE_W, 0);
+  for(let i=0;i<tiles.animated.length;i++) tiles.animated[i].tile.sheet(i*TILE_W, TILE_H, 0);
 
   Drawable.prototype.ctx = Game.ctx;
   setInterval( () => {
-    /*Map.*/
-    map_index = 0;
-    for(let y=0;y<10;y++)
-      for(let x=0;x<10;x++,map_index++)
-      {
-        if(map[map_index] < static_tiles.length)
-        {
-          static_tiles[map[map_index]].whole(x*TILE_W, y*TILE_H);
-        }else{
-          animated_tiles[map[map_index] - static_tiles.length].
-            ani(x*TILE_W, y*TILE_H, waterAni);
-        }
-      }
-    /**/
 
-    /**
-    direction = 0;
-    if(Keys.up) {py -= moveSpeed; direction |= DIR_N;}
-    if(Keys.right) {px += moveSpeed; direction |= DIR_E;}
-    if(Keys.down) {py += moveSpeed; direction |= DIR_S;}
-    if(Keys.left) {px -= moveSpeed; direction |= DIR_W;}
+    current_map.draw();
+
+    /**/
+    direction = dx = dy = 0;
+
+    if(Keys.up) {dy = -moveSpeed; direction |= DIR_N;}
+    if(Keys.right) {dx = moveSpeed; direction |= DIR_E;}
+    if(Keys.down) {dy = moveSpeed; direction |= DIR_S;}
+    if(Keys.left) {dx = -moveSpeed; direction |= DIR_W;}
+
+    //if(px > 0 && py > 0 && px < Game.width && py < Game.height){
+    let zx = px + dx, zy = py + dy;
+      if(
+        !coll(zx, zy) &&
+        !coll(zx + TILE_W, zy) &&
+        !coll(zx, zy + TILE_H) &&
+        !coll(zx + TILE_W, zy + TILE_H)
+      ){
+        px += dx;
+        py += dy;
+      }
+
+      /*if(!coll(px, py + dy)){
+        py += dy;
+      }*/
+    //}
 
     if(direction & DIR_N) pokemonAni = green_poke_N;
     if(direction & DIR_E) pokemonAni = green_poke_E;

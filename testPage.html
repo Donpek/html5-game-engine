@@ -6,11 +6,13 @@
 
   <script src='jquery-3.2.1.min.js'></script>
   <script src='mouse.js'></script>
-  <script src='animation.js'></script>
   <script src='keyboard.js'></script>
   <script src='canvas.js'></script>
   <script src='misc.js'></script>
-  <script src='sprite.js'></script>
+  <script src='animation.js'></script>
+  <script src='graphics.js'></script>
+  <script src='map.js'></script>
+  <script src='collision.js'></script>
   <script src='game.js'></script>
 </head>
 
@@ -18,6 +20,7 @@
   <script language='javascript'>
   const TILE_W = 32;
   const TILE_H = 32;
+  let current_map, tiles;
 
   let Game_Canvas = null;
   let Pallette = null;
@@ -31,26 +34,12 @@
     'sprites/pokemon.png',
   ];
 
-  let tiles;
-  let map = [
-    0,0,1,1,1,0,2,2,2,2,
-    0,1,1,1,0,0,0,2,2,2,
-    1,1,1,0,0,0,0,2,2,2,
-    1,1,0,0,0,0,0,0,2,2,
-    1,1,0,0,0,0,0,0,2,2,
-    1,1,0,0,0,0,0,0,2,2,
-    1,1,0,0,0,0,0,0,2,2,
-    1,1,0,0,0,0,0,2,2,2,
-    1,1,1,0,0,0,0,2,2,2,
-    0,1,1,1,0,0,2,2,2,2,
-  ];
-
-  let map_index = 0;
-
   /*player*/
   let px = py = 32;
+  let dx = dy = 0;
   let moveSpeed = 2;
   let direction;
+  let colliding = false;
 
   const green_poke_delay = [4,4,4,4];
   const green_poke_SW = new Animation([117,118,119,118],green_poke_delay);
@@ -64,7 +53,7 @@
 
   let pokemonAni = green_poke_S;
   let pokemonStill = 96;
-  const waterAni = new Animation([0,1,2,3,4,5],[75,77,99,77,75,73]);
+  const waterAni = new Animation([0,1,2,3,4,5],[15,17,21,17,15,13]);
   /**/
 
   $(document).ready( () => {
