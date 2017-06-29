@@ -1,4 +1,4 @@
-var Keyboard =
+const Keys =
 {
   left: false,
   up: false,
@@ -15,34 +15,34 @@ var Keyboard =
 
 const DIR_N = 1, DIR_E = 2, DIR_S = 4, DIR_W = 8;
 
-function startTrackingKeyboardInput()
+const Keyboard = function start_tracking_keyboard_input()
 {
   $(document).on('keydown', function(e){
     switch(e.keyCode){
-      case 37: Keyboard.left = true; break;
-      case 38: Keyboard.up = true; break;
-      case 39: Keyboard.right = true; break;
-      case 40: Keyboard.down = true; break;
-      case 65: Keyboard.a = true; break;
-      case 87: Keyboard.w = true; break;
-      case 68: Keyboard.d = true; break;
-      case 83: Keyboard.s = true; break;
-      case 16: Keyboard.shift = true; break;
+      case 37: Keys.left = true; break;
+      case 38: Keys.up = true; break;
+      case 39: Keys.right = true; break;
+      case 40: Keys.down = true; break;
+      case 65: Keys.a = true; break;
+      case 87: Keys.w = true; break;
+      case 68: Keys.d = true; break;
+      case 83: Keys.s = true; break;
+      case 16: Keys.shift = true; break;
       default: console.log('KeyCode not recognized.');
     }
   });
 
   $(document).on('keyup', function(e){
     switch(e.keyCode){
-      case 37: Keyboard.left = false; break;
-      case 38: Keyboard.up = false; break;
-      case 39: Keyboard.right = false; break;
-      case 40: Keyboard.down = false; break;
-      case 65: Keyboard.a = false; break;
-      case 87: Keyboard.w = false; break;
-      case 68: Keyboard.d = false; break;
-      case 83: Keyboard.s = false; break;
-      case 16: Keyboard.shift = false; break;
+      case 37: Keys.left = false; break;
+      case 38: Keys.up = false; break;
+      case 39: Keys.right = false; break;
+      case 40: Keys.down = false; break;
+      case 65: Keys.a = false; break;
+      case 87: Keys.w = false; break;
+      case 68: Keys.d = false; break;
+      case 83: Keys.s = false; break;
+      case 16: Keys.shift = false; break;
       default: console.log('KeyCode not recognized.');
     }
   });

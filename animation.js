@@ -1,4 +1,4 @@
-const Animation = function(frame_sequence, frame_delay_sequence)
+const Animation = function animation_constructor(frame_sequence, frame_delay_sequence)
 {
   if(frame_sequence.length != frame_delay_sequence.length)
     console.log('Both sequences have to be of the same length.');

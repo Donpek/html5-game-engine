@@ -1,16 +1,16 @@
 const TO_RADIANS = Math.PI / 180;
 
-function RandomInt(min, max) // [min; max)
+const rand = function random_integer_from_range(min, max) // [min; max)
 {
   return min + Math.floor(Math.random() * max);
 }
 
-function xy2i(x, y, map_width)
+const xy2i = function coordinates_to_index(x, y, map_width)
 {
   return y * map_width + x;
 }
 
-function i2xy(i, map_width)
+const i2xy = function index_to_coordinates(i, map_width)
 {
   return [ (i % map_width), (Math.floor(i / map_width)) ];
 }

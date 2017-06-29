@@ -10,6 +10,7 @@
   <script src='canvas.js'></script>
   <script src='math-stuffs.js'></script>
   <script src='sprite.js'></script>
+  <script src='game.js'></script>
 </head>
 
 <body style='background:#333'>
@@ -20,10 +21,13 @@
   let C = null;
   const FPS = 1000/30;
 
-  const gfx_src = ['sprites/testTile.png', 'sprites/testTile2.png', 'sprites/testSheet.png',
-    'sprites/pokemon.png'];
+  const gfx_src = [
+    'sprites/testTile.png',
+    'sprites/testTile2.png',
+    'sprites/testSheet.png',
+    'sprites/pokemon.png'
+  ];
 
-  /*map.js*/
   const map = [0,0,1,1,1,0,2,2,2,2,
                0,1,1,1,0,0,0,2,2,2,
                1,1,1,0,0,0,0,2,2,2,
@@ -36,14 +40,12 @@
                0,1,1,1,0,0,2,2,2,2];
 
   let map_index = 0;
-  /**/
 
-  /*player.js*/
+  /*player*/
   let px = py = 32;
-  const moveSpeed = 2;
-  let direction = 0;
+  let moveSpeed = 2;
+  let direction;
 
-    /*temp*/
   const green_poke_delay = [4,4,4,4];
   const green_poke_SW = new Animation([117,118,119,118],green_poke_delay);
   const green_poke_W = new Animation([114,115,116,115],green_poke_delay);
@@ -53,86 +55,29 @@
   const green_poke_E = new Animation([102,103,104,103],green_poke_delay);
   const green_poke_SE = new Animation([99,100,101,100],green_poke_delay);
   const green_poke_S = new Animation([96,97,98,97],green_poke_delay);
-    /**/
 
   let pokemonAni = green_poke_S;
   let pokemonStill = 96;
   const waterAni = new Animation([0,1,2,3,4,5],[75,77,99,77,75,73]);
   /**/
 
-  $(document).ready(function()
-  {
-    /*Initialize*/
-    C = new HTML_Canvas('game', 800, 640, '2d');
-    startTrackingKeyboardInput();
-      /*Disable scrolling*/
+  $(document).ready( () => {
+    /*Disable scrolling*/
     document.documentElement.style.overflow = 'hidden';
     document.body.scroll = 'no';
-      /**/
     /**/
+    C = new HTML_Canvas('game', 800, 640, '2d');
+    Drawable.prototype.ctx = C.ctx;
 
-    on_sprites_loaded = function()
-    {
-      const pokemon_npc = new Drawable(sprites[3]);
-      const pokemon_player = new Drawable(sprites[3]);
-      const tile_orange = new Drawable(sprites[0]);
-      const tile_red = new Drawable(sprites[1]);
-      const water = new Drawable(sprites[2]);
-
-      const static_tiles = [tile_orange, tile_red];
-      const animated_tiles = [water];
-
-      setInterval(function()
-      {
-        /*Map.*/
-        map_index = 0;
-        for(let y=0;y<10;y++)
-          for(let x=0;x<10;x++,map_index++)
-          {
-            if(map[map_index] < static_tiles.length)
-            {
-              static_tiles[map[map_index]].draw(x*TILE_W, y*TILE_H);
-            }else{
-              animated_tiles[map[map_index] - static_tiles.length].
-                drawAnimated(x*TILE_W, y*TILE_H, waterAni);
-            }
-          }
-        /**/
-
-        /*Player controls*/
-        direction = 0;
-        if(Keyboard.up) {py -= moveSpeed; direction |= DIR_N;}
-        if(Keyboard.right) {px += moveSpeed; direction |= DIR_E;}
-        if(Keyboard.down) {py += moveSpeed; direction |= DIR_S;}
-        if(Keyboard.left) {px -= moveSpeed; direction |= DIR_W;}
-        /**/
-
-        /*Animation*/
-        if(direction & DIR_N) pokemonAni = green_poke_N;
-        if(direction & DIR_E) pokemonAni = green_poke_E;
-        if(direction & DIR_S) pokemonAni = green_poke_S;
-        if(direction & DIR_W) pokemonAni = green_poke_W;
-        if(direction & DIR_N && direction & DIR_E) pokemonAni = green_poke_NE;
-        if(direction & DIR_N && direction & DIR_W) pokemonAni = green_poke_NW;
-        if(direction & DIR_S && direction & DIR_E) pokemonAni = green_poke_SE;
-        if(direction & DIR_S && direction & DIR_W) pokemonAni = green_poke_SW;
-
-        pokemonStill = pokemonAni.sequence[0].spriteID;
-
-        if(direction === 0){
-          pokemon_player.drawFromSheet(px,py,pokemonStill);
-        }else {
-          pokemon_player.drawAnimated(px,py,pokemonAni);
-        }
-        pokemon_npc.drawFromSheet(224,160,15);
-        /**/
-      },FPS);
-    };
-
-    loadSprites(gfx_src);
+    Sprites(gfx_src);
+    Keyboard();
   });
   </script>
 
   <canvas id="game"></canvas>
 </body>
 </html>
+
+<!--
+
+-->
