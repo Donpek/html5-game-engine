@@ -1,5 +1,30 @@
 - real-time map editor
   + mouse position tracking
   + tile pallette
-  - save/load maps as json(tiles:[], entities:[])
-- collision detection
+  - save/load maps as json(a Map object, basically, but in Json format)
+  - fillRect tool
+  - empty tile(basically eraser tool, but make it so it works with fillRect, too)
++ collision detection
+
++ Edit Tile constructor(drawable, collider, animation, type, gravity) (
+  type = 'wall', 'goomba', 'player', 'pipe_up', 'turtle_green', 'turtle_red', 'brick',
+  'shroom_red', 'shroom_green', 'box_empty', 'box_coins', 'box_green_shroom',
+  'box_red_shroom', 'box_fire_Flower', 'fire_flower', 'box_star', 'star', 'box_vine'
+)
++ Collider constructor(x, y, w, h) (x and y from origin aka drawable)
+- Edit pallette, make it such, that, when editing is off, you click on the tiles and
+  you get a pop-up with the name and description of the tile.
+- Add 'load map' button and 'load_map' text box, where you can type in a file path.
+- Game camera
+- Draw the assets(do a reskin with a twist, though): {
+  'wall', 'goomba', 'player', 'pipe_up', 'turtle_green', 'turtle_red', 'brick',
+  'shroom_red', 'shroom_green', 'box_empty', 'box_coins', 'box_green_shroom',
+  'box_red_shroom', 'box_fire_Flower', 'fire_flower', 'box_star', 'star', 'box_vine'
+}
+- Add sounds
+- Create some sfx and even music perhaps
+- Implement gravity
+- Add collision logic for everything
+- Add post-collision logic to everything
+- Analyze SMB level design
+- Add jumping

@@ -1,13 +1,16 @@
-const Tile = function tile_constructor(args){
-  if(args instanceof Tile){
-    this.tile = new Drawable(args.tile.sprite);
-    this.solid = args.solid;
-    this.ani = args.ani;
+const Entity = function entity_constructor(args){
+  if(args instanceof Entity){
+    this.draw = new Drawable(args.draw.sprite);
   }else{
-    this.tile = new Drawable(args);
-    this.solid = arguments[1];
-    this.ani = arguments[2];
+    this.draw = new Drawable(args.sprite);
   }
+  this.x = args.x;
+  this.y = args.y;
+  this.move_speed = args.move_speed;
+  this.type = args.type;
+  this.ani = args.ani;
+  this.coll = args.coll;
+  this.gravity = args.gravity;
 }
 
 const Map = function map_constructor(width, height){
@@ -18,7 +21,7 @@ const Map = function map_constructor(width, height){
 
   this.addLayer = function map_add_layer(default_tile){
     const layer = [];
-    for(let i=0,l=width*height;i<l;i++) layer.push(new Tile(default_tile));
+    for(let i=0,l=width*height;i<l;i++) layer.push(new Entity(default_tile));
     this.layers.push(layer);
   }
 
@@ -29,9 +32,9 @@ const Map = function map_constructor(width, height){
         for(let l=0;l<this.layers.length;l++){
           const current = this.layers[l][tile_index];
           if(current.ani === undefined){
-            current.tile.whole(x*TILE_W, y*TILE_H);
+            current.draw.whole(x*TILE_W, y*TILE_H);
           }else{
-            current.tile.ani(x*TILE_W, y*TILE_H, current.ani);
+            current.draw.ani(x*TILE_W, y*TILE_H, current.ani);
           }
         }
       }
