@@ -34,13 +34,6 @@
     'sprites/pokemon.png',
   ];
 
-  /*player*/
-  let px = py = 32;
-  let dx = dy = 0;
-  let moveSpeed = 2;
-  let direction;
-  let colliding = false;
-
   const green_poke_delay = [4,4,4,4];
   const green_poke_SW = new Animation([117,118,119,118],green_poke_delay);
   const green_poke_W = new Animation([114,115,116,115],green_poke_delay);
@@ -51,10 +44,8 @@
   const green_poke_SE = new Animation([99,100,101,100],green_poke_delay);
   const green_poke_S = new Animation([96,97,98,97],green_poke_delay);
 
-  let pokemonAni = green_poke_S;
   let pokemonStill = 96;
-  const waterAni = new Animation([0,1,2,3,4,5],[15,17,21,17,15,13]);
-  /**/
+  const water_ani = new Animation([0,1,2,3,4,5],[15,17,21,17,15,13]);
 
   $(document).ready( () => {
     /*Disable scrolling*/

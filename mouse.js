@@ -23,9 +23,9 @@ const Mouse = function start_tracking_mouse_input()
       const index = xy2i(coords.x,coords.y,Game.width/TILE_W);
       console.log(index);
       if(selected.y === 0){ //STATIC TILES
-        current_map.layers[0][index] = new Tile(tiles.static[selected.x]);
+        current_map.layers[0][index] = new Entity(tiles.static[selected.x]);
       }else{
-        current_map.layers[0][index] = new Tile(tiles.animated[selected.x]);
+        current_map.layers[0][index] = new Entity(tiles.animated[selected.x]);
       }
     }
     /**/
