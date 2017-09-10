@@ -1,19 +1,11 @@
 on_sprites_loaded = () => {
   const poke_coll = new RectCollider(0.25,0.25,0.5,0.5);
   const poke_player = new Entity({
-<<<<<<< HEAD
     x: 32, y: 32,
     move_speed: 2,
     sprite: sprites[3],
     type: 'player',
-    ani: green_poke_SE,
-=======
-    x: 0, y: 0,
-    move_speed: 2,
-    sprite: sprites[3],
-    type: 'player',
     ani: poke_ani,
->>>>>>> d9e1a6cf9deb93a8b1ac512cb87e3899e0a38478
     coll: poke_coll
   });
 
@@ -74,7 +66,6 @@ on_sprites_loaded = () => {
       poke_player.y += poke_player.dy;
     }
 
-<<<<<<< HEAD
     if(poke_player.dir & DIR_N) poke_player.ani = green_poke_N;
     if(poke_player.dir & DIR_E) poke_player.ani = green_poke_E;
     if(poke_player.dir & DIR_S) poke_player.ani = green_poke_S;
@@ -85,7 +76,6 @@ on_sprites_loaded = () => {
     if(poke_player.dir & DIR_S && poke_player.dir & DIR_W) poke_player.ani = green_poke_SW;
 
     pokemonStill = poke_player.ani.sequence[0].spriteID;
-=======
     if(poke_player.dir & DIR_N) poke_ani = green_poke_N;
     if(poke_player.dir & DIR_E) poke_ani = green_poke_E;
     if(poke_player.dir & DIR_S) poke_ani = green_poke_S;
@@ -96,16 +86,13 @@ on_sprites_loaded = () => {
     if(poke_player.dir & DIR_S && poke_player.dir & DIR_W) poke_ani = green_poke_SW;
 
     pokemonStill = poke_ani.sequence[0].spriteID;
->>>>>>> d9e1a6cf9deb93a8b1ac512cb87e3899e0a38478
 
     if(poke_player.dir === 0){
       poke_player.draw.sheet(poke_player.x,poke_player.y,pokemonStill);
     }else {
-<<<<<<< HEAD
       poke_player.draw.ani(poke_player.x,poke_player.y,poke_player.ani);
-=======
+
       poke_player.draw.ani(poke_player.x,poke_player.y,poke_ani);
->>>>>>> d9e1a6cf9deb93a8b1ac512cb87e3899e0a38478
     }
   },FPS);
 };

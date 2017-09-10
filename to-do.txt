@@ -18,7 +18,7 @@
 - Game camera
 - Draw the assets(do a reskin with a twist, though): {
   'wall', 'goomba', 'player', 'pipe_up', 'turtle_green', 'turtle_red', 'brick',
-  'shroom_red', 'shroom_green', 'box_empty', 'box_coins', 'box_green_shroom',
+  'shroom_red', 'shroom_green', 'box_empty', 'box_coin', 'brick_coin', 'box_green_shroom',
   'box_red_shroom', 'box_fire_Flower', 'fire_flower', 'box_star', 'star', 'box_vine'
 }
 - Add sounds
